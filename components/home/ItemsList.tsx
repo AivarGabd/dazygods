@@ -6,10 +6,12 @@ import { Item } from "@/app/types";
 
 export default async function ItemsList() {
   const items = await getAllItems()
+
+  if(items.length === 0) return <div>No items found</div>
   return (
     <>
-      {items.map((item) => (
-        <ItemCard key={item._id.toString()} {...(item as unknown as Item)} />
+      {items.map((item,index) => (
+        <ItemCard key={index} {...(item as unknown as Item)} />
       ))}
 
     </>
