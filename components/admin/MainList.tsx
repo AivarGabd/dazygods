@@ -99,7 +99,7 @@ const AdminMainList = ({ categories }: { categories: string }) => {
             className="w-full font-medium"
             onPress={onOpen}
           >
-            Добавить категорию sadasd
+            Добавить категорию
           </Button>
         </div>
 
