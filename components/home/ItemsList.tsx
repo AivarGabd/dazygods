@@ -1,5 +1,3 @@
-
-
 import { getAllItems } from "@/app/actions";
 import ItemCard from "./ItemCard";
 import { Item } from "@/app/types";
@@ -13,7 +11,6 @@ export default async function ItemsList() {
       {items.map((item,index) => (
         <ItemCard key={index} {...(item as unknown as Item)} />
       ))}
-
     </>
   );
 };

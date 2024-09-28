@@ -1,9 +1,17 @@
-const Page = () => {
+import { getAllCategories } from "../actions";
+import AdminMainList from "@/components/admin/MainList";
+
+
+const Page = async () => {
+    const categories = JSON.stringify(await getAllCategories())
     return (
-        <div>
-            <h1>Admin</h1>
+        <div className="flex flex-col gap-4">
+            <h1 className="text-2xl font-bold">Все категорий товаров</h1>
+            <div>
+                <AdminMainList categories={categories} />
+            </div>
         </div>
-    )
-}
+    );
+};
 
 export default Page;

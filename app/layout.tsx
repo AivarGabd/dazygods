@@ -8,6 +8,8 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
+import { userAgent } from "next/server";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: {
@@ -32,6 +34,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const reqUserAgent = userAgent({ headers: headers() });
+  const viewport = reqUserAgent.device.type === "mobile" ? "mobile" : "desktop";
+
   return (
     <html suppressHydrationWarning lang="en">
       <head />
@@ -43,11 +48,10 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl flex-grow">
+            {viewport == 'desktop' ? <Navbar /> : null}
+            <main className="container mx-auto max-w-7xl flex-grow px-4 lg:px-0 py-2">
               {children}
             </main>
-
           </div>
         </Providers>
       </body>
