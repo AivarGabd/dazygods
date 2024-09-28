@@ -103,7 +103,7 @@ const AdminMainList = ({ categories }: { categories: string }) => {
           </Button>
         </div>
 
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
           <ModalContent>
             {(onClose) => (
               <>
