@@ -4,19 +4,25 @@ import Image from "next/image";
 import { Item } from "@/app/types";
 import { Button } from "@nextui-org/button";
 import { Heart, MessageCircle, ShoppingCart } from "lucide-react";
+import { userAgent } from "next/server";
+import { headers } from "next/headers";
+import AddToCartButton from "../templates/AddToCartButton";
+import AskQuestionButton from "../templates/AskQuestionButton";
 
 const ItemCard = (item: Item) => {
   const id = item._id.toString();
+  const reqUserAgent = userAgent({ headers: headers() });
+  const viewport = reqUserAgent.device.type === "mobile" ? "mobile" : "desktop";
 
   return (
     <Link href={`/item?id=${id}`} key={id}>
-      <Card className="w-[200px] bg-gray-100">
+      <Card className="w-[200px] lg:w-[300px] bg-gray-100">
         <CardHeader className="px-0 w-full bg-white">
           <Image
             src={item.images[0]}
             alt={item.title}
-            width={150}
-            height={120}
+            width={viewport == "mobile" ? 150 : 300}
+            height={viewport == "mobile" ? 120 : 200}
             className="m-auto"
           />
         </CardHeader>
@@ -32,26 +38,26 @@ const ItemCard = (item: Item) => {
               maximumFractionDigits: 0,
             })}{" "}
             / шт
-            <div className="text-xs font-normal">Артикул: {item.code}</div>
+            <div className="text-xs font-normal mt-[-2px]">
+              Артикул: {item.code}
+            </div>
           </div>
         </CardBody>
         <CardFooter className="flex flex-col gap-2">
           <div className="flex gap-1 justify-center w-full">
-            <Button
-              color="success"
-              startContent={<ShoppingCart />}
-              size="sm"
-              className="w-full"
-            >
-              В корзину
-            </Button>
-            <Button isIconOnly size="sm">
-              <Heart />
+            <AddToCartButton
+              itemId={id}
+              size={viewport == "mobile" ? "sm" : "md"}
+            />
+            <Button isIconOnly size={viewport == "mobile" ? "sm" : "md"}>
+              <Heart size={20} />
             </Button>
           </div>
-          <Button className="w-full" startContent={<MessageCircle />} size="sm">
-            Задать вопрос
-          </Button>
+          <AskQuestionButton
+            itemId={id}
+            size={viewport == "mobile" ? "sm" : "md"}
+            styles="w-full"
+          />
         </CardFooter>
       </Card>
     </Link>

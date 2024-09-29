@@ -102,3 +102,12 @@ export async function getItemById(itemId: string) {
   return item;
 }
 
+
+export async function getArrayofItems(itemIds: string[]) {
+  const { db } = await connectToDatabase();
+  const items = await db.collection("catalog").find({ _id: { $in: itemIds.map(id => new ObjectId(id)) } }).toArray();
+  return items;
+}
+
+
+

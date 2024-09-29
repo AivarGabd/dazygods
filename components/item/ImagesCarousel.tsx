@@ -4,10 +4,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
+import { useIsMobile } from "@/lib/useIsMobile";
 
 const ImagesCarousel = ({ images }: { images: string[] }) => {
+  const isMobile = useIsMobile();
+
   return (
     <Swiper
+      direction={isMobile ? "horizontal" : "vertical"}
       spaceBetween={50}
       slidesPerView={3}
       onSlideChange={() => console.log("slide change")}

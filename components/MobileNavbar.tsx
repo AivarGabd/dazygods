@@ -3,11 +3,11 @@
 import { Button } from "@nextui-org/react";
 import { Heart, House, Info, ShoppingCart } from "lucide-react";
 import { Drawer } from "vaul";
+import About from "./templates/About";
 
 const MobileNavbar = () => {
   return (
     <div className="flex justify-between items-center bg-white px-8 py-2 fixed bottom-0 left-0 right-0 z-50">
-    <div className="flex justify-between items-center bg-[#f5f5f5] px-8 py-2">
       <a href="/">
         <Button isIconOnly variant="flat">
           <House />
@@ -40,25 +40,11 @@ const MobileNavbar = () => {
               paddingBottom: "env(safe-area-inset-bottom)",
             }}
           >
-            <Drawer.Handle className="bg-gray-200 mt-2"/>
-            <div className="mt-2">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Id
-              repellendus repellat repudiandae modi nostrum fugit quas, officiis
-              atque optio velit veniam distinctio animi ipsam ut ad numquam. Ut,
-              iusto et.
-            </div>
             <Drawer.Handle className="bg-gray-200 mt-2" />
-           
-           <div className="mt-2">
-           Lorem ipsum dolor sit amet consectetur adipisicing elit. Id
-            repellendus repellat repudiandae modi nostrum fugit quas, officiis
-            atque optio velit veniam distinctio animi ipsam ut ad numquam. Ut,
-            iusto et.
-           </div>
+            <About />
           </Drawer.Content>
         </Drawer.Portal>
       </Drawer.Root>
-    </div>
     </div>
   );
 };

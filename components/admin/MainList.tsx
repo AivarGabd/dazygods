@@ -66,7 +66,6 @@ const AdminMainList = ({ categories }: { categories: CategoryType[] }) => {
                     categoriesArrayState={categoriesArrayState}
                     setCategoriesArrayState={setCategoriesArrayState}
                   />
-                 
                 </div>
                 <div className="flex flex-col gap-1 bg-gray-50 p-1 rounded-md">
                   <div className="font-medium text-lg">Все товары</div>
