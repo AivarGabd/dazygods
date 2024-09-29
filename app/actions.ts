@@ -3,8 +3,8 @@
 import { delay } from "@/lib/utils";
 import { MongoClient, Db, ObjectId } from "mongodb";
 
-//const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
-const mongodbUri = "mongodb://0.0.0.0:27017/db1";
+const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
+//const mongodbUri = "mongodb://0.0.0.0:27017/db1";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;

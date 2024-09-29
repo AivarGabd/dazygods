@@ -29,38 +29,7 @@ const CategoryTable = ({ categoryId }: { categoryId: string }) => {
   const isMobile = useIsMobile();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const columns = [
-    {
-      label: "Картинка",
-      key: "image",
-    },
-    {
-      label: "Название",
-      key: "title",
-    },
-    {
-      label: "Посещения",
-      key: "visits",
-    },
-  ];
-
-  const { data } = useQuery({
-    queryKey: ["items"],
-    queryFn: () => getAllItems(categoryId),
-  });
-
-  const [selectedKeys, setSelectedKeys] = useState<
-    "all" | Iterable<string | number> | undefined
-  >(new Set([]));
-
-  if (!data) return <div>Loading...</div>;
-
-  const rows = data.map((item) => ({
-    key: item.id,
-    image: item.images[0],
-    title: item.title,
-    visits: item.visits,
-  }));
+  //здесь fetch всех товаров по этой категории
 
   return (
     <div className="flex flex-col gap-4">
