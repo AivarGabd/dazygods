@@ -10,6 +10,7 @@ import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import { userAgent } from "next/server";
 import { headers } from "next/headers";
+import MobileNavbar from "@/components/MobileNavbar";
 
 export const metadata: Metadata = {
   title: {
@@ -51,9 +52,10 @@ export default function RootLayout({
         >
           <div className="relative flex flex-col h-screen">
             {viewport == "desktop" ? <Navbar /> : null}
-            <main className="container mx-auto max-w-7xl flex-grow px-4 lg:px-0 py-2">
+            <main className="container mx-auto max-w-7xl flex-grow px-0">
               {children}
             </main>
+            {viewport == "mobile" ? <MobileNavbar /> : null}
           </div>
         </Providers>
       </body>

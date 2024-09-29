@@ -3,8 +3,8 @@
 import { delay } from "@/lib/utils";
 import { MongoClient, Db, ObjectId } from "mongodb";
 
-//const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
-const mongodbUri = "mongodb://0.0.0.0:27017/db1";
+const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
+//const mongodbUri = "mongodb://0.0.0.0:27017/db1";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
@@ -48,10 +48,16 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-export async function getAllItems() {
+export async function getAllItems(categoryId?: string) {
   const { db } = await connectToDatabase();
 
-  const catalog = await db.collection("catalog").find().toArray();
+  let query = {};
+  if (categoryId) {
+    query = { categoryId: categoryId };
+  }
+
+  const catalog = await db.collection("catalog").find(query).toArray();
+
 
   return catalog;
 }
@@ -89,3 +95,10 @@ export async function deleteCategory(categoryId: string) {
   //а да, надо пробегаться по всем товарам и удалять их
   return { success: true };
 }
+
+export async function getItemById(itemId: string) {
+  const { db } = await connectToDatabase();
+  const item = await db.collection("catalog").findOne({ _id: new ObjectId(itemId) });
+  return item;
+}
+
