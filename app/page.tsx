@@ -8,18 +8,14 @@ export default function Home() {
     <section className="flex flex-col gap-4">
       <div className="flex gap-2">
         <Suspense fallback={<>Loading categories...</>}>
-        <Categories />
-
+          <Categories />
         </Suspense>
       </div>
 
       <section className="flex flex-wrap gap-2 w-full">
-        {/* <Suspense fallback={<>List loading...</>}>
+        <Suspense fallback={<>List loading...</>}>
           <ItemsList />
-        </Suspense> */}
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam ut
-        quae, sunt recusandae eos ducimus iusto nostrum tempora consequuntur
-        eum, assumenda ipsum. Earum doloribus non exercitationem ullam ab ex in.
+        </Suspense>
       </section>
     </section>
   );

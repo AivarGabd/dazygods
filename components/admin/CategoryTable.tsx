@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -9,6 +9,7 @@ import {
   TableRow,
   TableCell,
   Button,
+  Image,
 } from "@nextui-org/react";
 import { PlusIcon } from "lucide-react";
 import {
@@ -19,11 +20,47 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
+import { useQuery } from "react-query";
+import { getAllItems } from "@/app/actions";
+import { useIsMobile } from "@/lib/useIsMobile";
+import AddNewDraftButton from "./AddNewDraftButton";
 
-const CategoryTable = () => {
+const CategoryTable = ({ categoryId }: { categoryId: string }) => {
+  const isMobile = useIsMobile();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  //здесь fetch всех товаров по этой категории
+  const columns = [
+    {
+      label: "Картинка",
+      key: "image",
+    },
+    {
+      label: "Название",
+      key: "title",
+    },
+    {
+      label: "Посещения",
+      key: "visits",
+    },
+  ];
+
+  const { data } = useQuery({
+    queryKey: ["items"],
+    queryFn: () => getAllItems(categoryId),
+  });
+
+  const [selectedKeys, setSelectedKeys] = useState<
+    "all" | Iterable<string | number> | undefined
+  >(new Set([]));
+
+  if (!data) return <div>Loading...</div>;
+
+  const rows = data.map((item) => ({
+    key: item.id,
+    image: item.images[0],
+    title: item.title,
+    visits: item.visits,
+  }));
 
   return (
     <div className="flex flex-col gap-4">
@@ -31,45 +68,44 @@ const CategoryTable = () => {
         aria-label="Example static collection table"
         isCompact
         removeWrapper
+        selectionMode="single"
+        defaultSelectedKeys={selectedKeys}
+        onSelectionChange={(keys) => {
+          onOpen();
+          setSelectedKeys(keys);
+        }}
       >
         <TableHeader>
-          <TableColumn>NAME</TableColumn>
-          <TableColumn>ROLE</TableColumn>
-          <TableColumn>STATUS</TableColumn>
+          {columns.map((column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          ))}
         </TableHeader>
         <TableBody>
-          <TableRow key="1">
-            <TableCell>Tony Reichert</TableCell>
-            <TableCell>CEO</TableCell>
-            <TableCell>Active</TableCell>
-          </TableRow>
-          <TableRow key="2">
-            <TableCell>Zoey Lang</TableCell>
-            <TableCell>Technical Lead</TableCell>
-            <TableCell>Paused</TableCell>
-          </TableRow>
-          <TableRow key="3">
-            <TableCell>Jane Fisher</TableCell>
-            <TableCell>Senior Developer</TableCell>
-            <TableCell>Active</TableCell>
-          </TableRow>
-          <TableRow key="4">
-            <TableCell>William Howard</TableCell>
-            <TableCell>Community Manager</TableCell>
-            <TableCell>Vacation</TableCell>
-          </TableRow>
+          {rows.map((row) => (
+            <TableRow key={row.key}>
+              {(columnKey) => (
+                <TableCell>
+                  {columnKey === "image" ? (
+                    <Image
+                      src={row[columnKey]}
+                      alt={row.title}
+                      width={100}
+                      height={100}
+                    />
+                  ) : (
+                    row[columnKey as keyof typeof row]
+                  )}
+                </TableCell>
+              )}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
-      <Button
-        variant="flat"
-        startContent={<PlusIcon />}
-        className="font-medium text-left w-full lg:w-[300px]"
-        onPress={onOpen}
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement={isMobile ? "top" : "center"}
       >
-        Добавить новый товар
-      </Button>
-
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -108,6 +144,8 @@ const CategoryTable = () => {
           )}
         </ModalContent>
       </Modal>
+
+      <AddNewDraftButton />
     </div>
   );
 };
