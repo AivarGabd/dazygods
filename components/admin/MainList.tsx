@@ -12,23 +12,18 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
-import { useState } from "react";
-import { createNewCategory } from "@/app/actions";
+import { useEffect, useState } from "react";
+import { createNewCategory, editCategoryName } from "@/app/actions";
 import CategoryTable from "./CategoryTable";
 import EditCategoryNameButton from "./EditCategoryNameButton";
+import { useIsMobile } from "@/lib/useIsMobile";
+import { CategoryType } from "@/app/types";
+import DeleteCategoryButton from "./DeleteCategoryButton";
 
-type Category = {
-  _id: string;
-  name: string;
-  //date: Date;
-};
+const AdminMainList = ({ categories }: { categories: CategoryType[] }) => {
+  const isMobile = useIsMobile();
 
-const AdminMainList = ({ categories }: { categories: string }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const categoriesArray: Category[] = JSON.parse(categories);
-  const [categoriesArrayState, setCategoriesArrayState] =
-    useState<{ _id: string; name: string }[]>(categoriesArray);
+  const [categoriesArrayState, setCategoriesArrayState] = useState(categories);
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -38,21 +33,25 @@ const AdminMainList = ({ categories }: { categories: string }) => {
     createNewCategory(inputValue)
       .then((data) => {
         onClose();
-        //@ts-ignore
-        setCategoriesArrayState([...categoriesArrayState, data]);
+        setCategoriesArrayState([
+          ...categoriesArrayState,
+          data as CategoryType,
+        ]);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  useEffect(() => {
+    if (isOpen) return;
+    setInputValue("");
+  }, [isOpen]);
+
   return (
     <div className="flex flex-col gap-10">
       <div>
-        <Accordion
-          onSelectionChange={(e) => console.log(Array.from(e))}
-          selectionMode="single"
-        >
+        <Accordion selectionMode="single">
           {categoriesArrayState.map((category) => (
             <AccordionItem
               key={category._id}
@@ -61,15 +60,13 @@ const AdminMainList = ({ categories }: { categories: string }) => {
             >
               <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap gap-1">
-                  <EditCategoryNameButton />
-                  <Button
-                    color="danger"
-                    variant="flat"
-                    className="font-medium text-rose-600"
-                    startContent={<Trash size={18} />}
-                  >
-                    Удалить категорию
-                  </Button>
+                  <EditCategoryNameButton
+                    name={category.name}
+                    categoryId={category._id}
+                    categoriesArrayState={categoriesArrayState}
+                    setCategoriesArrayState={setCategoriesArrayState}
+                  />
+                 
                 </div>
                 <div className="flex flex-col gap-1 bg-gray-50 p-1 rounded-md">
                   <div className="font-medium text-lg">Все товары</div>
@@ -103,7 +100,11 @@ const AdminMainList = ({ categories }: { categories: string }) => {
           </Button>
         </div>
 
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top">
+        <Modal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          placement={isMobile ? "top" : "center"}
+        >
           <ModalContent>
             {(onClose) => (
               <>

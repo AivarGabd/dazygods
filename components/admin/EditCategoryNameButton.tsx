@@ -1,5 +1,8 @@
 "use client";
 
+import { editCategoryName } from "@/app/actions";
+import { CategoryType } from "@/app/types";
+import { useIsMobile } from "@/lib/useIsMobile";
 import {
   Modal,
   ModalContent,
@@ -8,11 +11,47 @@ import {
   ModalFooter,
   useDisclosure,
   Button,
+  Input,
 } from "@nextui-org/react";
-import { Pencil } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
+import { useState } from "react";
+import DeleteCategoryButton from "./DeleteCategoryButton";
 
-const EditCategoryNameButton = () => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+const EditCategoryNameButton = ({
+  name,
+  categoryId,
+  categoriesArrayState,
+  setCategoriesArrayState,
+}: {
+  name: string;
+  categoryId: string;
+  categoriesArrayState: CategoryType[];
+  setCategoriesArrayState: React.Dispatch<React.SetStateAction<CategoryType[]>>;
+}) => {
+  const isMobile = useIsMobile();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [inputValue, setInputValue] = useState<string>(name);
+
+  const editCategoryNameEvent = async (categoryId: string, newName: string) => {
+    editCategoryName(categoryId, newName)
+      .then((data) => {
+        const obj = categoriesArrayState.find(
+          (category) => category._id === categoryId
+        );
+        let newData = { ...obj, name: data.name } as CategoryType;
+
+        setCategoriesArrayState((categories: CategoryType[]) =>
+          categories.map((category) =>
+            category._id === categoryId ? newData : category
+          )
+        );
+
+        onClose();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <>
@@ -22,39 +61,49 @@ const EditCategoryNameButton = () => {
         startContent={<Pencil size={18} />}
         onPress={onOpen}
       >
-        Редактировать название и категории
+        Редактирование
       </Button>
 
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement={isMobile ? "top" : "center"}
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Modal Title</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Редактирование название категории
+              </ModalHeader>
               <ModalBody>
-                <p> 
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat consequat elit
-                  dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt cillum quis. 
-                  Velit duis sit officia eiusmod Lorem aliqua enim laboris do dolor eiusmod. 
-                  Et mollit incididunt nisi consectetur esse laborum eiusmod pariatur 
-                  proident Lorem eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <Input
+                  defaultValue={name}
+                  onChange={(e) => setInputValue(e.target.value)}
+                />
+
+              <DeleteCategoryButton
+              categoryId={categoryId}
+              setCategoriesArrayState={setCategoriesArrayState}
+              />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                <Button
+                  color="danger"
+                  variant="flat"
+                  onPress={onClose}
+                  className="font-medium text-rose-600"
+                >
+                  Отменить
                 </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
+                <Button
+                  color="success"
+                  className="font-medium text-white"
+                  isDisabled={inputValue.length === 0}
+                  onPress={() => {
+                    editCategoryNameEvent(categoryId, inputValue);
+                  }}
+                >
+                  Сохранить
                 </Button>
               </ModalFooter>
             </>

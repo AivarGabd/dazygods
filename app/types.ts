@@ -15,3 +15,10 @@ export type Item = {
   draft: boolean;
   code: string;
 }
+
+
+export type CategoryType = {
+  _id: string,
+  name: string,
+  date: string|Date
+}

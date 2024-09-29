@@ -1,10 +1,10 @@
 "use server";
 
 import { delay } from "@/lib/utils";
-import { MongoClient, Db } from "mongodb";
+import { MongoClient, Db, ObjectId } from "mongodb";
 
-const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
-//|| "mongodb://0.0.0.0:27017/db1";
+//const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
+const mongodbUri = "mongodb://0.0.0.0:27017/db1";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
@@ -53,7 +53,6 @@ export async function getAllItems() {
 
   const catalog = await db.collection("catalog").find().toArray();
 
-
   return catalog;
 }
 
@@ -67,7 +66,26 @@ export async function getAllCategories() {
 
 export async function createNewCategory(categoryName: string) {
   const { db } = await connectToDatabase();
-  let newData = { name: categoryName, date: new Date() };
-  const category = await db.collection("categories").insertOne(newData);
-  return newData
+  const newData = { name: categoryName, date: new Date() };
+  let category = await db.collection("categories").insertOne(newData);
+  return { ...newData, _id: category.insertedId.toString() };
+}
+
+export async function editCategoryName(categoryId: string, newName: string) {
+  const { db } = await connectToDatabase();
+  let data = { name: newName };
+  const category = await db
+    .collection("categories")
+    .updateOne({ _id: new ObjectId(categoryId) }, { $set: { name: newName } });
+
+  return data;
+}
+
+export async function deleteCategory(categoryId: string) {
+  const { db } = await connectToDatabase();
+  await db.collection("categories").deleteOne({ _id: new ObjectId(categoryId) });
+  //await db.collection("catalog").deleteMany({ categoryId: categoryId });
+
+  //а да, надо пробегаться по всем товарам и удалять их
+  return { success: true };
 }

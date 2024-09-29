@@ -36,19 +36,21 @@ export default function RootLayout({
 }) {
   const reqUserAgent = userAgent({ headers: headers() });
   const viewport = reqUserAgent.device.type === "mobile" ? "mobile" : "desktop";
-
   return (
     <html suppressHydrationWarning lang="en">
       <head />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+        <Providers
+          themeProps={{ attribute: "class", defaultTheme: "light" }}
+          reqUserAgent={reqUserAgent}
+        >
           <div className="relative flex flex-col h-screen">
-            {viewport == 'desktop' ? <Navbar /> : null}
+            {viewport == "desktop" ? <Navbar /> : null}
             <main className="container mx-auto max-w-7xl flex-grow px-4 lg:px-0 py-2">
               {children}
             </main>
