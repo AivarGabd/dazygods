@@ -1,12 +1,11 @@
-import {ObjectId} from 'mongodb'
+import { ObjectId } from "mongodb";
 
 export type Item = {
-  _id: ObjectId;
+  _id: ObjectId | string;
   title: string;
   images: string[];
   price: string;
   stock: string;
-  id: string;
   visits: number;
   purchases: number;
   characteristics: any[]; // Consider defining a more specific type if possible
@@ -14,11 +13,11 @@ export type Item = {
   peculiarities: any[]; // Consider defining a more specific type if possible
   draft: boolean;
   code: string;
-}
-
+  count: number 
+};
 
 export type CategoryType = {
-  _id: string,
-  name: string,
-  date: string|Date
-}
+  _id: string;
+  name: string;
+  date: string | Date;
+};

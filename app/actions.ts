@@ -2,8 +2,10 @@
 
 import { delay } from "@/lib/utils";
 import { MongoClient, Db, ObjectId } from "mongodb";
+import { Item } from "./types";
 
-const mongodbUri = 'mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628'
+const mongodbUri =
+  "mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628";
 //const mongodbUri = "mongodb://0.0.0.0:27017/db1";
 
 let client: MongoClient | null = null;
@@ -58,7 +60,6 @@ export async function getAllItems(categoryId?: string) {
 
   const catalog = await db.collection("catalog").find(query).toArray();
 
-
   return catalog;
 }
 
@@ -89,7 +90,9 @@ export async function editCategoryName(categoryId: string, newName: string) {
 
 export async function deleteCategory(categoryId: string) {
   const { db } = await connectToDatabase();
-  await db.collection("categories").deleteOne({ _id: new ObjectId(categoryId) });
+  await db
+    .collection("categories")
+    .deleteOne({ _id: new ObjectId(categoryId) });
   //await db.collection("catalog").deleteMany({ categoryId: categoryId });
 
   //а да, надо пробегаться по всем товарам и удалять их
@@ -98,16 +101,21 @@ export async function deleteCategory(categoryId: string) {
 
 export async function getItemById(itemId: string) {
   const { db } = await connectToDatabase();
-  const item = await db.collection("catalog").findOne({ _id: new ObjectId(itemId) });
+  const item = await db
+    .collection("catalog")
+    .findOne({ _id: new ObjectId(itemId) });
   return item;
 }
 
-
 export async function getArrayofItems(itemIds: string[]) {
   const { db } = await connectToDatabase();
-  const items = await db.collection("catalog").find({ _id: { $in: itemIds.map(id => new ObjectId(id)) } }).toArray();
-  return items;
+  const items = JSON.parse(
+    JSON.stringify(
+      await db
+        .collection("catalog")
+        .find({ _id: { $in: itemIds.map((id) => new ObjectId(id)) } })
+        .toArray()
+    )
+  );
+  return items as Item[];
 }
-
-
-

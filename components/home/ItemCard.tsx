@@ -8,6 +8,8 @@ import { userAgent } from "next/server";
 import { headers } from "next/headers";
 import AddToCartButton from "../templates/AddToCartButton";
 import AskQuestionButton from "../templates/AskQuestionButton";
+import AddToFavoritesButton from "../templates/AddToFavoritesButton";
+import CurrentStockBlock from "../templates/CurrentStockBlock";
 
 const ItemCard = (item: Item) => {
   const id = item._id.toString();
@@ -41,6 +43,9 @@ const ItemCard = (item: Item) => {
             <div className="text-xs font-normal mt-[-2px]">
               Артикул: {item.code}
             </div>
+            <div>
+              <CurrentStockBlock value={item.stock} size={viewport == "mobile" ? "sm" : "md"} />
+            </div>
           </div>
         </CardBody>
         <CardFooter className="flex flex-col gap-2">
@@ -49,9 +54,11 @@ const ItemCard = (item: Item) => {
               itemId={id}
               size={viewport == "mobile" ? "sm" : "md"}
             />
-            <Button isIconOnly size={viewport == "mobile" ? "sm" : "md"}>
-              <Heart size={20} />
-            </Button>
+   
+            <AddToFavoritesButton
+              itemId={id}
+              size={viewport == "mobile" ? "sm" : "md"}
+            />
           </div>
           <AskQuestionButton
             itemId={id}

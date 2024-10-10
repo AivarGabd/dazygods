@@ -35,6 +35,7 @@ const AskQuestionButton = ({
         startContent={<MessageCircle size={18} />}
         onClick={(e) => {
           e.preventDefault();
+          e.stopPropagation()
           onOpen();
         }}
       >

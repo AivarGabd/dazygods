@@ -1,12 +1,13 @@
 import { getItemById } from "@/app/actions";
 import { Item } from "@/app/types";
-import { Button } from "@nextui-org/react";
+
 import Image from "next/image";
 import AboutReturnButton from "./AboutReturnButton";
-import AddToFavoritesButton from "./AddToFavoritesButton";
+import AddToFavoritesButton from "../templates/AddToFavoritesButton";
 import ImagesCarousel from "./ImagesCarousel";
 import AskQuestionButton from "../templates/AskQuestionButton";
 import AddToCartButton from "../templates/AddToCartButton";
+import CurrentStockBlock from "../templates/CurrentStockBlock";
 
 const ItemMainBlock = async ({ itemId }: { itemId: string }) => {
   const item = (await getItemById(itemId)) as Item;
@@ -45,7 +46,7 @@ const ItemMainBlock = async ({ itemId }: { itemId: string }) => {
               </div>
 
               <div className="ml-auto mr-4 flex gap-2 ">
-                <AddToFavoritesButton />
+                <AddToFavoritesButton itemId={item._id.toString()} size="sm" />
                 <AboutReturnButton />
               </div>
             </div>
@@ -54,8 +55,8 @@ const ItemMainBlock = async ({ itemId }: { itemId: string }) => {
           <div className="hidden lg:flex lg:flex-col lg:mr-0 lg:ml-auto lg:mt-8">
             <div className="flex flex-col gap-6 bg-gray-100 p-2 rounded-md w-[400px]">
               <div className="flex flex-wrap gap-2 w-full ">
-                <div>
-                  <h2 className="text-xl font-medium flex justify-center align-middle items-center">
+                <div className="flex flex-col gap-0">
+                  <h2 className="text-xl font-medium flex">
                     {(+item.price).toLocaleString("ru-RU", {
                       style: "currency",
                       currency: "RUB",
@@ -64,13 +65,10 @@ const ItemMainBlock = async ({ itemId }: { itemId: string }) => {
                     })}{" "}
                     / шт
                   </h2>
-                  <div className="text-sm text-gray-500 mt-[-4px] font-medium">
-                    <div>В наличии {item.stock} шт</div>
-                  </div>
+                  <CurrentStockBlock value={item.stock} size="md" />
                 </div>
 
                 <div className="ml-auto mr-4 flex gap-2 ">
-                  <AddToFavoritesButton />
                   <AboutReturnButton />
                 </div>
               </div>
@@ -78,7 +76,13 @@ const ItemMainBlock = async ({ itemId }: { itemId: string }) => {
               <div className="flex flex-col gap-2">
                 <AddToCartButton itemId={item._id.toString()} />
 
-                <AskQuestionButton itemId={item._id.toString()} />
+                <div className="flex flex-wrap gap-2">
+                  <AddToFavoritesButton
+                    itemId={item._id.toString()}
+                    size="md"
+                  />
+                  <AskQuestionButton itemId={item._id.toString()} />
+                </div>
                 <div className="text-sm text-gray-500 font-medium mt-[-4px]">
                   Артикул: {item.code}
                 </div>
