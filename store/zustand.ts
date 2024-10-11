@@ -1,12 +1,22 @@
 import { create } from "zustand";
 
-type infoMenuState = {
+type DialogState = {
   isOpen: boolean;
-  updateIsOpen: (newState: boolean) => void;
+  title: "about-return" | "about-delivery" | "about-payment";
 };
 
-export const useAnimeEntriesStore = create<infoMenuState>((set) => ({
-  isOpen: false,
-  updateIsOpen: (newState) => set(() => ({ isOpen: newState })),
-}));
+type InfoMenuState = {
+  dialogState: DialogState;
+  updateDialogState: (newState: Partial<DialogState>) => void;
+};
 
+export const useAnimeEntriesStore = create<InfoMenuState>((set) => ({
+  dialogState: {
+    isOpen: false,
+    title: "about-return",
+  },
+  updateDialogState: (newState) =>
+    set((state) => ({
+      dialogState: { ...state.dialogState, ...newState },
+    })),
+}));

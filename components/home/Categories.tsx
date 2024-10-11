@@ -1,16 +1,14 @@
 import { getAllCategories } from "@/app/actions";
+import CategoriesSelect from "./CategoriesSelect";
 
 const Categories = async () => {
-
-    const categories = await getAllCategories();
-
-   
+  const categories = await getAllCategories();
 
   return (
     <div>
-      <h1>Categories</h1>
+     <CategoriesSelect/>
     </div>
-  )
-}
+  );
+};
 
 export default Categories;

@@ -3,18 +3,25 @@ import ItemsList from "@/components/home/ItemsList";
 import CategoriesSelect from "@/components/home/CategoriesSelect";
 import Categories from "@/components/home/Categories";
 
-export default function Home() {
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { filter: string };
+}) {
+
+
+
   return (
     <section className="flex flex-col gap-4">
-      {/* <div className="flex gap-2">
+      <div className="flex gap-2">
         <Suspense fallback={<>Loading categories...</>}>
           <Categories />
         </Suspense>
-      </div> */}
+      </div>
 
       <section className="flex flex-wrap gap-2 w-full">
         <Suspense fallback={<>List loading...</>}>
-          <ItemsList />
+          <ItemsList filter={searchParams.filter} />
         </Suspense>
       </section>
     </section>

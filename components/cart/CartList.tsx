@@ -12,13 +12,20 @@ type CartItem = {
 const CartList = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartItemsLoaded, setIsCartItemsLoaded] = useState(false);
+  const [isCartEmpty, setIsCartEmpty] = useState(false);
   const [notAvailableItems, setNotAvailableItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     if(isCartItemsLoaded) return;
-    let arr = JSON.parse(localStorage.getItem("cart")!);
-    let newArr: { id: string; count: number }[] = [];
+    let arr = JSON.parse(localStorage.getItem("cart")||"[]");
+    
+    if(!arr.length) {
+      setIsCartItemsLoaded(true)
+      setIsCartEmpty(true);
+      return;
+    }
 
+    let newArr: { id: string; count: number }[] = [];
     arr.forEach((item: string) => {
       if (newArr.find((x) => x.id == item)) {
         let test = newArr.find((x) => x.id == item);
@@ -45,7 +52,10 @@ const CartList = () => {
     });
   }, []);
 
+
+
   if (!isCartItemsLoaded) return <div>Loading...</div>;
+  if (isCartEmpty) return <div>В корзине пока ничего нет</div>;
 
   return (
     <div className="flex flex-col gap-2 mt-4">
