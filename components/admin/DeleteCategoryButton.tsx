@@ -40,7 +40,7 @@ const DeleteCategoryButton = ({
         startContent={<Trash size={18} />}
         onPress={onOpen}
       >
-        Полностью удалить категорию
+        Полностью удалить категорию и ее товары
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

@@ -1,10 +1,11 @@
 "use client";
 
+import { CategoryType } from "@/app/types";
 import { Button } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Trash } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+
 
 const animals = [
   { key: "cat", label: "Cat" },
@@ -22,11 +23,12 @@ const animals = [
   { key: "crocodile", label: "Crocodile" },
 ];
 
-const CategoriesSelect = () => {
+const CategoriesSelect = ({categories}: {categories: CategoryType[]}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter");
 
+  console.log(categories);
 
   const removeFilter = () => {
     router.push("/");

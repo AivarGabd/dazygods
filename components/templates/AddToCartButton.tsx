@@ -46,8 +46,6 @@ const AddToCartButton = ({
         isInCart && <ArrowRight size={size === "sm" ? "16" : "20"} />
       }
       onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation()
         handleClick();
         router.push('/cart')
       }}

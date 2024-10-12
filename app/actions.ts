@@ -3,15 +3,16 @@
 import { delay } from "@/lib/utils";
 import { MongoClient, Db, ObjectId } from "mongodb";
 import { Item } from "./types";
+import { cookies } from "next/headers";
 
-const mongodbUri =
-  "mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628";
-//const mongodbUri = "mongodb://0.0.0.0:27017/db1";
+//const mongodbUri =
+// "mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628";
+const mongodbUri = "mongodb://0.0.0.0:27017/db1";
 
 let client: MongoClient | null = null;
 let db: Db | null = null;
 
-export async function connectToDatabase() {
+async function connectToDatabase() {
   if (client && db) {
     return { client, db };
   }
@@ -73,7 +74,7 @@ export async function getAllCategories() {
 
 export async function createNewCategory(categoryName: string) {
   const { db } = await connectToDatabase();
-  const newData = { name: categoryName, date: new Date() };
+  const newData = { name: categoryName, date: new Date(), isDraft: true };
   let category = await db.collection("categories").insertOne(newData);
   return { ...newData, _id: category.insertedId.toString() };
 }
@@ -90,12 +91,12 @@ export async function editCategoryName(categoryId: string, newName: string) {
 
 export async function deleteCategory(categoryId: string) {
   const { db } = await connectToDatabase();
+
   await db
     .collection("categories")
     .deleteOne({ _id: new ObjectId(categoryId) });
-  //await db.collection("catalog").deleteMany({ categoryId: categoryId });
+  await db.collection("catalog").deleteMany({ categoryId: categoryId });
 
-  //а да, надо пробегаться по всем товарам и удалять их
   return { success: true };
 }
 
@@ -118,4 +119,53 @@ export async function getArrayofItems(itemIds: string[]) {
     )
   );
   return items as Item[];
+}
+
+export async function adminLogin(formData: FormData) {
+  let email = formData.get("email");
+  let password = formData.get("password");
+
+  const { db } = await connectToDatabase();
+  const admin = await db.collection("admins").findOne({ email: email });
+  if (!admin) {
+    return { error: "Администратор с таким email не найден" };
+  }
+  if (admin.password !== password) {
+    return { error: "Неверный пароль" };
+  }
+
+  await db
+    .collection("admins")
+    .updateOne({ email: email }, { $set: { lastVisit: new Date() } });
+
+  cookies().set("admin", `${admin.email}`);
+  return { success: true };
+}
+
+export async function askQuestion(data: {
+  email: string;
+  question: string;
+  itemId: string;
+}) {
+  const { db } = await connectToDatabase();
+  await db
+    .collection("users-questions")
+    .insertOne({ ...data, date: new Date() });
+
+  //надо отправить письмо на почту администратора с вопросом
+  return { success: true };
+}
+
+export async function editCategoryStatus(
+  categoryId: string,
+  newStatus: boolean
+) {
+  const { db } = await connectToDatabase();
+  await db
+    .collection("categories")
+    .updateOne(
+      { _id: new ObjectId(categoryId) },
+      { $set: { isDraft: newStatus } }
+    );
+  return { success: true };
 }

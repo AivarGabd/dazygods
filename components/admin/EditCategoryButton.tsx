@@ -17,13 +17,15 @@ import { Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import DeleteCategoryButton from "./DeleteCategoryButton";
 
-const EditCategoryNameButton = ({
+const EditCategoryButton = ({
   name,
+  isDraft,
   categoryId,
   categoriesArrayState,
   setCategoriesArrayState,
 }: {
   name: string;
+  isDraft: boolean;
   categoryId: string;
   categoriesArrayState: CategoryType[];
   setCategoriesArrayState: React.Dispatch<React.SetStateAction<CategoryType[]>>;
@@ -51,6 +53,20 @@ const EditCategoryNameButton = ({
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const editCategoryStatus = async (categoryId: string, newStatus: boolean) => {
+
+    editCategoryStatus(categoryId, newStatus).then(() => {
+      setCategoriesArrayState((categories: CategoryType[]) =>
+        categories.map((category) =>
+          category._id === categoryId ? { ...category, isDraft: newStatus } : category
+        )
+      );
+      onClose();
+    }).catch((error) => {
+      console.error(error);
+    });
   };
 
   return (
@@ -81,10 +97,17 @@ const EditCategoryNameButton = ({
                   onChange={(e) => setInputValue(e.target.value)}
                 />
 
-              <DeleteCategoryButton
-              categoryId={categoryId}
-              setCategoriesArrayState={setCategoriesArrayState}
-              />
+                <Button className="w-full" variant="flat" onPress={() => {
+                    editCategoryStatus(categoryId, !isDraft);
+                  }}
+                >
+                  {isDraft ? "Опубликовать" : "Сделать черновиком"}
+                </Button>
+
+                <DeleteCategoryButton
+                  categoryId={categoryId}
+                  setCategoriesArrayState={setCategoriesArrayState}
+                />
               </ModalBody>
               <ModalFooter>
                 <Button
@@ -114,4 +137,4 @@ const EditCategoryNameButton = ({
   );
 };
 
-export default EditCategoryNameButton;
+export default EditCategoryButton;

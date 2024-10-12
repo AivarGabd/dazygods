@@ -13,11 +13,13 @@ export type Item = {
   peculiarities: any[]; // Consider defining a more specific type if possible
   draft: boolean;
   code: string;
-  count: number 
+  count: number;
+  questions: { question: string; answer: string }[];
 };
 
 export type CategoryType = {
   _id: string;
   name: string;
   date: string | Date;
+  isDraft: boolean;
 };

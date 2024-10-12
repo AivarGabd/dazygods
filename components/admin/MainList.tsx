@@ -15,7 +15,7 @@ import { Input } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { createNewCategory, editCategoryName } from "@/app/actions";
 import CategoryTable from "./CategoryTable";
-import EditCategoryNameButton from "./EditCategoryNameButton";
+import EditCategoryButton from "./EditCategoryButton";
 import { useIsMobile } from "@/lib/useIsMobile";
 import { CategoryType } from "@/app/types";
 import DeleteCategoryButton from "./DeleteCategoryButton";
@@ -32,7 +32,7 @@ const AdminMainList = ({ categories }: { categories: CategoryType[] }) => {
     if (inputValue.length === 0) return;
     createNewCategory(inputValue)
       .then((data) => {
-        onClose();
+        onClose();  
         setCategoriesArrayState([
           ...categoriesArrayState,
           data as CategoryType,
@@ -51,17 +51,25 @@ const AdminMainList = ({ categories }: { categories: CategoryType[] }) => {
   return (
     <div className="flex flex-col gap-10">
       <div>
-        <Accordion selectionMode="single">
+        <Accordion selectionMode="single" variant="bordered">
           {categoriesArrayState.map((category) => (
             <AccordionItem
               key={category._id}
               aria-label={category.name}
-              title={category.name}
+              title={
+                <>
+                  <span className="font-medium">{category.name}</span> -{" "}
+                  <span className="text-sm text-gray-500 font-semibold">
+                    {category.isDraft ? "Черновик" : "Опубликовано"}
+                  </span>
+                </>
+              }
             >
               <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap gap-1">
-                  <EditCategoryNameButton
+                  <EditCategoryButton
                     name={category.name}
+                    isDraft={category.isDraft}
                     categoryId={category._id}
                     categoriesArrayState={categoriesArrayState}
                     setCategoriesArrayState={setCategoriesArrayState}
@@ -111,14 +119,16 @@ const AdminMainList = ({ categories }: { categories: CategoryType[] }) => {
                   Добавление категории
                 </ModalHeader>
                 <ModalBody>
-                  <Input
+                 <form action={createNewCategoryEvent} className="flex flex-col gap-4">
+                 <Input
                     type="text"
                     label="Название категории"
+                    name="name"
                     onChange={(e) => setInputValue(e.target.value)}
                   />
-                </ModalBody>
-                <ModalFooter>
-                  <Button
+
+                <div className="flex gap-2 justify-end">
+                <Button
                     color="danger"
                     variant="light"
                     onPress={onClose}
@@ -128,13 +138,16 @@ const AdminMainList = ({ categories }: { categories: CategoryType[] }) => {
                   </Button>
                   <Button
                     color="success"
-                    onPress={createNewCategoryEvent}
+                    type="submit"
                     className="font-medium text-white"
                     isDisabled={inputValue.length === 0}
                   >
                     Сохранить
                   </Button>
-                </ModalFooter>
+                </div>
+
+                 </form>
+                </ModalBody>
               </>
             )}
           </ModalContent>

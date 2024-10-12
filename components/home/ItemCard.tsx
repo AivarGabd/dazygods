@@ -17,9 +17,9 @@ const ItemCard = (item: Item) => {
   const viewport = reqUserAgent.device.type === "mobile" ? "mobile" : "desktop";
 
   return (
-    <Link href={`/item?id=${id}`} key={id}>
-      <Card className="w-[200px] lg:w-[300px] bg-gray-100">
-        <CardHeader className="px-0 w-full bg-white">
+    <Card className="w-[200px] lg:w-[300px] bg-gray-100">
+      <CardHeader className="px-0 w-full bg-white">
+        <Link href={`/item?id=${id}`} key={id}>
           <Image
             src={item.images[0]}
             alt={item.title}
@@ -27,8 +27,10 @@ const ItemCard = (item: Item) => {
             height={viewport == "mobile" ? 120 : 200}
             className="m-auto"
           />
-        </CardHeader>
-        <CardBody className="flex flex-col gap-2">
+        </Link>
+      </CardHeader>
+      <CardBody className="flex flex-col gap-2">
+        <Link href={`/item?id=${id}`} key={id}>
           <h2 className="leading-none font-medium text-gray-500 text-sm">
             {item.title}
           </h2>
@@ -44,30 +46,33 @@ const ItemCard = (item: Item) => {
               Артикул: {item.code}
             </div>
             <div>
-              <CurrentStockBlock value={item.stock} size={viewport == "mobile" ? "sm" : "md"} />
+              <CurrentStockBlock
+                value={item.stock}
+                size={viewport == "mobile" ? "sm" : "md"}
+              />
             </div>
           </div>
-        </CardBody>
-        <CardFooter className="flex flex-col gap-2">
-          <div className="flex gap-1 justify-center w-full">
-            <AddToCartButton
-              itemId={id}
-              size={viewport == "mobile" ? "sm" : "md"}
-            />
-   
-            <AddToFavoritesButton
-              itemId={id}
-              size={viewport == "mobile" ? "sm" : "md"}
-            />
-          </div>
-          <AskQuestionButton
+        </Link>
+      </CardBody>
+      <CardFooter className="flex flex-col gap-2">
+        <div className="flex gap-1 justify-center w-full">
+          <AddToCartButton
             itemId={id}
             size={viewport == "mobile" ? "sm" : "md"}
-            styles="w-full"
           />
-        </CardFooter>
-      </Card>
-    </Link>
+
+          <AddToFavoritesButton
+            itemId={id}
+            size={viewport == "mobile" ? "sm" : "md"}
+          />
+        </div>
+        <AskQuestionButton
+          itemId={id}
+          size={viewport == "mobile" ? "sm" : "md"}
+          styles="w-full"
+        />
+      </CardFooter>
+    </Card>
   );
 };
 
