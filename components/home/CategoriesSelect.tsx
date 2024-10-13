@@ -6,29 +6,14 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { Trash } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-
-const animals = [
-  { key: "cat", label: "Cat" },
-  { key: "dog", label: "Dog" },
-  { key: "elephant", label: "Elephant" },
-  { key: "lion", label: "Lion" },
-  { key: "tiger", label: "Tiger" },
-  { key: "giraffe", label: "Giraffe" },
-  { key: "dolphin", label: "Dolphin" },
-  { key: "penguin", label: "Penguin" },
-  { key: "zebra", label: "Zebra" },
-  { key: "shark", label: "Shark" },
-  { key: "whale", label: "Whale" },
-  { key: "otter", label: "Otter" },
-  { key: "crocodile", label: "Crocodile" },
-];
-
-const CategoriesSelect = ({categories}: {categories: CategoryType[]}) => {
+const CategoriesSelect = ({ categories }: { categories: CategoryType[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filter = searchParams.get("filter");
-
-  console.log(categories);
+  const categoriesWithKeys = categories.map((category) => ({
+    ...category,
+    key: category.name.toLowerCase(),
+  }));
 
   const removeFilter = () => {
     router.push("/");
@@ -47,8 +32,8 @@ const CategoriesSelect = ({categories}: {categories: CategoryType[]}) => {
           router.push(`?filter=${arr.join(".")}`);
         }}
       >
-        {animals.map((animal) => (
-          <SelectItem key={animal.key}>{animal.label}</SelectItem>
+        {categoriesWithKeys.map((category) => (
+          <SelectItem key={category.key}>{category.name}</SelectItem>
         ))}
       </Select>
       <Button
