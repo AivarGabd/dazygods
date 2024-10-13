@@ -39,7 +39,7 @@ export default function RootLayout({
         <Providers reqUserAgent={reqUserAgent}>
           <div className="relative flex flex-col h-screen">
             {viewport == "desktop" ? <Navbar /> : null}
-            <main className="container mx-auto max-w-7xl flex-grow px-0">
+            <main className="container mx-auto max-w-7xl flex-grow px-0 lg:mt-[70px]">
               {children}
             </main>
             {viewport == "mobile" ? <MobileNavbar /> : null}
