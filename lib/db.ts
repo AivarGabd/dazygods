@@ -1,4 +1,3 @@
-import EasyYandexS3 from "easy-yandex-s3";
 import { MongoClient, Db } from "mongodb";
 
 const mongodbUri =
