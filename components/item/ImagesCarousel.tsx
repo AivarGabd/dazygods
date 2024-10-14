@@ -17,8 +17,8 @@ const ImagesCarousel = ({ images }: { images: string[] }) => {
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      {images.map((x) => (
-        <SwiperSlide>
+      {images.map((x,index) => (
+        <SwiperSlide key={index}>
           <img src={x} alt={x} className="h-[100px]" />
         </SwiperSlide>
       ))}
