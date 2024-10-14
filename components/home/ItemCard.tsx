@@ -2,8 +2,6 @@ import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import Link from "next/link";
 import Image from "next/image";
 import { Item } from "@/app/types";
-import { Button } from "@nextui-org/button";
-import { Heart, MessageCircle, ShoppingCart } from "lucide-react";
 import { userAgent } from "next/server";
 import { headers } from "next/headers";
 import AddToCartButton from "../templates/AddToCartButton";
