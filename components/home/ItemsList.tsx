@@ -2,22 +2,19 @@ import { getAllPublishedItems } from "@/app/actions";
 import ItemCard from "./ItemCard";
 import { Item } from "@/app/types";
 
-export default async function ItemsList({filter}: {filter: string}) {
+export default async function ItemsList({ filter }: { filter: string }) {
+  //const items = await getAllPublishedItems(filter)
 
-  console.log(filter)
+  const items: Item[] = []
+  
 
-  const items = await getAllPublishedItems(filter)
-
-
-
-  if(items.length === 0) return <div>У нас пока нет товаров в этой категории</div>
+  if (items.length === 0)
+    return <div>У нас пока нет товаров в этой категории</div>;
   return (
     <>
-      {items.map((item,index) => (
+      {items.map((item, index) => (
         <ItemCard key={index} {...(item as unknown as Item)} />
       ))}
     </>
   );
-};
-
-
+}
