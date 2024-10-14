@@ -9,7 +9,7 @@ const AddToFavoritesButton = ({
   itemId,
   size,
 }: {
-  itemId: string;
+  itemId?: string;
   size?: "sm" | "md";
 }) => {
   const [isFavoritesDataLoaded, setIsFavoritesDataLoaded] = useState(false);
@@ -41,6 +41,7 @@ const AddToFavoritesButton = ({
 
   return (
     <Button
+    
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();

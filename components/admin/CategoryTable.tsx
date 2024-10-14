@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -11,7 +11,7 @@ import {
   Button,
   Image,
 } from "@nextui-org/react";
-import { PlusIcon } from "lucide-react";
+
 import {
   Modal,
   ModalContent,
@@ -24,8 +24,21 @@ import { useQuery } from "react-query";
 import { getAllItems } from "@/app/actions";
 import { useIsMobile } from "@/lib/useIsMobile";
 import AddNewDraftButton from "./AddNewDraftButton";
+import EditItemData from "../templates/EditItemData";
+import { Selection } from "@react-types/shared";
+import { Item } from "@/app/types";
 
-const CategoryTable = ({ categoryId }: { categoryId: string }) => {
+
+type row = {
+  key: string;
+  image: string;
+  title: string;
+  visits: number;
+  draft: boolean;
+  category: string;
+}
+
+const CategoryTable = ({ categoryId, categoryName }: { categoryId: string, categoryName: string }) => {
   const isMobile = useIsMobile();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -42,6 +55,10 @@ const CategoryTable = ({ categoryId }: { categoryId: string }) => {
       label: "Посещения",
       key: "visits",
     },
+    {
+      label: "Видимость",
+      key: "draft",
+    },
   ];
 
   const { data } = useQuery({
@@ -49,18 +66,30 @@ const CategoryTable = ({ categoryId }: { categoryId: string }) => {
     queryFn: () => getAllItems(categoryId),
   });
 
-  const [selectedKeys, setSelectedKeys] = useState<
-    "all" | Iterable<string | number> | undefined
-  >(new Set([]));
+  const [selectedCell, setSelectedCell] = useState<Selection>(new Set([]));
+
+  useEffect(() => {
+    if (!isOpen) setSelectedCell(new Set([]));
+  }, [isOpen]);
 
   if (!data) return <div>Loading...</div>;
 
-  const rows = data.map((item) => ({
-    key: item.id,
+  
+
+  const rows:row[] = data.map((item: Item) => ({
+    key: item._id?.toString() || "",
     image: item.images[0],
     title: item.title,
     visits: item.visits,
+    draft: item.draft,
   }));
+
+  let selectedItem: Item | undefined = undefined;
+  if (Array.from(selectedCell).length) {
+    selectedItem = data.find(
+      (item: Item) => item._id?.toString() == Array.from(selectedCell)[0].toString()
+    ) as Item;
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,10 +98,10 @@ const CategoryTable = ({ categoryId }: { categoryId: string }) => {
         isCompact
         removeWrapper
         selectionMode="single"
-        defaultSelectedKeys={selectedKeys}
-        onSelectionChange={(keys) => {
+        selectedKeys={selectedCell}
+        onSelectionChange={(keys: Selection) => {
           onOpen();
-          setSelectedKeys(keys);
+          setSelectedCell(keys);
         }}
       >
         <TableHeader>
@@ -93,7 +122,13 @@ const CategoryTable = ({ categoryId }: { categoryId: string }) => {
                       height={100}
                     />
                   ) : (
-                    row[columnKey as keyof typeof row]
+                    <div>
+                      {row[columnKey as keyof typeof row]}
+
+                      {columnKey === "draft" && (
+                        <>{row.draft ? "Черновик" : "Опубликовано"}</>
+                      )}
+                    </div>
                   )}
                 </TableCell>
               )}
@@ -105,47 +140,23 @@ const CategoryTable = ({ categoryId }: { categoryId: string }) => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         placement={isMobile ? "top" : "center"}
+        size="4xl"
       >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Modal Title
+                Редактирование товара
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam pulvinar risus non risus hendrerit venenatis.
-                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
-                </p>
-                <p>
-                  Magna exercitation reprehenderit magna aute tempor cupidatat
-                  consequat elit dolor adipisicing. Mollit dolor eiusmod sunt ex
-                  incididunt cillum quis. Velit duis sit officia eiusmod Lorem
-                  aliqua enim laboris do dolor eiusmod. Et mollit incididunt
-                  nisi consectetur esse laborum eiusmod pariatur proident Lorem
-                  eiusmod et. Culpa deserunt nostrud ad veniam.
-                </p>
+                <EditItemData item={selectedItem as Item} />
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
 
-      <AddNewDraftButton />
+      <AddNewDraftButton categoryName={categoryName} />
     </div>
   );
 };

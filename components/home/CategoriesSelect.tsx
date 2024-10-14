@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 const CategoriesSelect = ({ categories }: { categories: CategoryType[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const filter = searchParams.get("filter");
+  const filter = searchParams?.get("filter");
   const categoriesWithKeys = categories.map((category) => ({
     ...category,
     key: category.name.toLowerCase(),

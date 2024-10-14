@@ -101,7 +101,7 @@ const EditCategoryButton = ({
                     editCategoryStatus(categoryId, !isDraft);
                   }}
                 >
-                  {isDraft ? "Опубликовать" : "Сделать черновиком"}
+                  {isDraft ? "Сделать категорию видимой" : "Сделать категорию и ее товары черновиками"}
                 </Button>
 
                 <DeleteCategoryButton

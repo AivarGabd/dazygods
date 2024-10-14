@@ -8,6 +8,7 @@ import { Navbar } from "@/components/navbar";
 import { userAgent } from "next/server";
 import { headers } from "next/headers";
 import MobileNavbar from "@/components/MobileNavbar";
+import Footer from "@/components/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -44,6 +45,7 @@ export default function RootLayout({
             </main>
             {viewport == "mobile" ? <MobileNavbar /> : null}
           </div>
+          <Footer />
         </Providers>
       </body>
     </html>

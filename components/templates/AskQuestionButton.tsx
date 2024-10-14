@@ -22,7 +22,7 @@ const AskQuestionButton = ({
   size,
   styles,
 }: {
-  itemId: string;
+  itemId?: string;
   size?: "sm" | "md";
   styles?: string;
 }) => {
@@ -41,7 +41,7 @@ const AskQuestionButton = ({
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
     const question = formData.get("question") as string;
-    const result = await askQuestion({email, question, itemId});
+    const result = await askQuestion({ email, question, itemId: itemId! });
     if (result.success) {
       onClose();
       setQuestion(null);

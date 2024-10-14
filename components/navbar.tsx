@@ -46,9 +46,6 @@ export const Navbar = () => {
           </ul>
         </NavbarContent>
 
-        <NavbarItem className="flex">
-        <NavbarAboutButton />
-        </NavbarItem>
       </NextUINavbar>
 
      

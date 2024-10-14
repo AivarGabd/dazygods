@@ -14,7 +14,7 @@ const CartItem = ({ item }: { item: Item }) => {
   //сделать защиту то того, сколько вообще есть товара на складе
   return (
     <div
-      key={item._id.toString()}
+      key={item._id?.toString()}
       className="flex flex-row gap-2 bg-gray-100 p-2 rounded-md w-[660px]"
     >
       <img src={item.images[0]} alt={item.title} className="w-[150px]" />
@@ -29,11 +29,11 @@ const CartItem = ({ item }: { item: Item }) => {
               <Trash2 />
             </Button>
             <AddToFavoritesButton
-              itemId={item._id.toString()}
+              itemId={item._id?.toString()}
               size={isMobile ? "sm" : "md"}
             />
 
-            <AskQuestionButton itemId={item._id.toString()} />
+            <AskQuestionButton itemId={item._id?.toString()} />
           </div>
         </div>
         <div>

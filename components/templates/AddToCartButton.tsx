@@ -9,7 +9,7 @@ const AddToCartButton = ({
   itemId,
   size,
 }: {
-  itemId: string;
+  itemId?: string;
   size?: "sm" | "md";
 }) => {
   const router = useRouter()

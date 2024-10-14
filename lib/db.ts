@@ -1,6 +1,8 @@
+import EasyYandexS3 from "easy-yandex-s3";
 import { MongoClient, Db } from "mongodb";
 
-const mongodbUri = "mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628";
+const mongodbUri =
+"mongodb://aivargab:Kaban48412356-Ars@90.156.219.41/MongoDB-3628";
 //const mongodbUri = "mongodb://0.0.0.0:27017/db1";
 
 let client: MongoClient | null = null;
@@ -25,7 +27,7 @@ export async function connectToDatabase() {
       db = null;
     });
 
-    console.log("Connected to MongoDB");
+    //console.log("Connected to MongoDB");
     return { client, db };
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error);
@@ -41,3 +43,13 @@ process.on("SIGINT", async () => {
   }
   process.exit(0);
 });
+
+
+export const s3 = new EasyYandexS3({
+  auth: {
+      accessKeyId: "YCAJEKNzwJfdfa2-7DQ5Z2jWa",
+      secretAccessKey: "YCMx4xn3_0bX8Lx3QTdoRoJKCdQkP7cHmt-QTEz-",
+  },
+  Bucket: "gorki",
+});
+

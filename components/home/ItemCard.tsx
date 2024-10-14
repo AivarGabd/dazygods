@@ -12,7 +12,7 @@ import AddToFavoritesButton from "../templates/AddToFavoritesButton";
 import CurrentStockBlock from "../templates/CurrentStockBlock";
 
 const ItemCard = (item: Item) => {
-  const id = item._id.toString();
+  const id = item._id?.toString();
   const reqUserAgent = userAgent({ headers: headers() });
   const viewport = reqUserAgent.device.type === "mobile" ? "mobile" : "desktop";
 
@@ -47,7 +47,7 @@ const ItemCard = (item: Item) => {
             </div>
             <div>
               <CurrentStockBlock
-                value={item.stock}
+                value={item.stock.toString()}
                 size={viewport == "mobile" ? "sm" : "md"}
               />
             </div>

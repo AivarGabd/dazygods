@@ -11,11 +11,30 @@ import {
   Button,
   Input,
 } from "@nextui-org/react";
+import { Item } from "@/app/types";
+import EditItemData from "../templates/EditItemData";
 
-const AddNewDraftButton = () => {
+const AddNewDraftButton = ({categoryName}:{categoryName:string}) => {
   const isMobile = useIsMobile();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+ 
+  const newDraftItem: Item = {
+    _id: "",
+    title: "",
+    description: "",
+    price: "",
+    images: [],
+    categoryKey: categoryName.toLowerCase(),
+    draft: true,
+    code: "",
+    count: 0,
+    peculiarities: [],
+    characteristics: [],
+    questions: [],
+    stock: "0",
+    visits: 0,
+    purchases: 0,
+  };
   return (
     <>
       <Button
@@ -31,6 +50,7 @@ const AddNewDraftButton = () => {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         placement={isMobile ? "bottom" : "center"}
+         size="4xl"
       >
         <ModalContent>
           {(onClose) => (
@@ -40,16 +60,9 @@ const AddNewDraftButton = () => {
               </ModalHeader>
               <ModalBody>
              
-                <Input label="Название"></Input>
+               <EditItemData item={newDraftItem} asNewDraft={true} />
               </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button color="primary" onPress={onClose}>
-                  Action
-                </Button>
-              </ModalFooter>
+             
             </>
           )}
         </ModalContent>

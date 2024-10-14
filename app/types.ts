@@ -15,6 +15,7 @@ export type Item = {
   code: string;
   count: number;
   questions: { question: string; answer: string }[];
+  categoryKey : string;
 };
 
 export type CategoryType = {

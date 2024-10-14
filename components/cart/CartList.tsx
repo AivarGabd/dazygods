@@ -46,7 +46,7 @@ const CartList = () => {
           .filter((x) => +x.stock > 0)
           .map((item) => ({
             ...item,
-            count: newArr.find((x) => x.id == item._id.toString())!.count,
+            count: newArr.find((x) => x.id == item._id?.toString())!.count,
           }))
       );
     });

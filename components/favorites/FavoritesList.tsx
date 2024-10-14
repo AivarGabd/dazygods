@@ -30,7 +30,7 @@ const FavoritesList = () => {
   return (
     <div>
       {favorites.map((item) => (
-        <div key={item._id.toString()} className="">
+        <div key={item._id?.toString()} className="">
           {item.title}
         </div>
       ))}
