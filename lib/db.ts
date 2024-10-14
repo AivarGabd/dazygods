@@ -45,11 +45,3 @@ process.on("SIGINT", async () => {
 });
 
 
-export const s3 = new EasyYandexS3({
-  auth: {
-      accessKeyId: "YCAJEKNzwJfdfa2-7DQ5Z2jWa",
-      secretAccessKey: "YCMx4xn3_0bX8Lx3QTdoRoJKCdQkP7cHmt-QTEz-",
-  },
-  Bucket: "gorki",
-});
-

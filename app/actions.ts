@@ -53,7 +53,4 @@ export const getAllActiveCategories = categoryActions.getAllActiveCategories;
 export const getAllItems = itemActions.getAllItems;
 export const getItemById = itemActions.getItemById;
 export const getArrayofItems = itemActions.getArrayofItems;
-export const deleteItemImages = itemActions.deleteItemImages;
 export const getAllPublishedItems = itemActions.getAllPublishedItems;
-export const updateImagesOrder = itemActions.updateImagesOrder;
-export const addNewDraftItem = itemActions.addNewDraftItem;
